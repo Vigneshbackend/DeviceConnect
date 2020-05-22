@@ -83,7 +83,7 @@ func Filter(name string, starttime string, endtime string) model.QrSummaryData {
 
 	var out model.QrSummaryData
 
-	if name != "" && starttime != "" && endtime != "" {
+	if name != ""{
 
 		Init()
 		var refer model.Reqbody
