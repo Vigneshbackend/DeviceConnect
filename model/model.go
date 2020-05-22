@@ -15,7 +15,7 @@ type Transactionresponse struct {
 }
 
 type Req struct {
-	Merchant_id string
+	Merchant_id string`json:"merchant_id"`
 }
 
 type Reqbody struct {

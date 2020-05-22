@@ -44,7 +44,7 @@ type Resultdata struct {
 	Channel                  string
 }
 
-func Timeconversion(name string, rettime string) {
+func Timeconversion() {
 	// layout := "01/02/2006 3:04:05 PM"
 	// refer := retime
 	// fmt.Println("---->print", rettime)
@@ -79,7 +79,7 @@ func Timeconversion(name string, rettime string) {
 
 }
 
-func Filter(name string, starttime string, endtime string) model.QrSummaryData {
+func Filter(name string) model.QrSummaryData {
 
 	var out model.QrSummaryData
 
@@ -89,8 +89,7 @@ func Filter(name string, starttime string, endtime string) model.QrSummaryData {
 		var refer model.Reqbody
 		var transaction model.Transactionobject
 
-		Timeconversion("start_time", starttime)
-		Timeconversion("end_time", endtime)
+		Timeconversion()
 		refer.Customer_id = name
 		refer.Version = version
 		refer.Salt = repo.GetSaltForCustomer(name)

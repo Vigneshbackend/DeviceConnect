@@ -40,16 +40,17 @@ func HandleAccountRoutes(router *mux.Router) {
 
 	router.HandleFunc("/GetQRSummary", func(w http.ResponseWriter, r *http.Request) {
 		var out model.QrSummaryOutput
-		var DateFilter model.DateFilter
+		var req model.Req
+
 
 		decoder := json.NewDecoder(r.Body)
-		err := decoder.Decode(&DateFilter)
+		err := decoder.Decode(&req)
 		fmt.Print("--->errr", err)
 		w.Header().Set("Content-Type", "application/json")
 
 		if err == nil {
 
-			out.Data = controller.Filter(DateFilter.Customer_id, DateFilter.Start_date, DateFilter.End_date)
+			out.Data = controller.Filter(req.Merchant_id)
 			if out.Data.Status != "completed" {
 				out.Error = out.Data.Status
 				out.Code = 400
