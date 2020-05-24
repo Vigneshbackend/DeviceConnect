@@ -1,18 +1,13 @@
 package model
 
-type AccountsAndTransactional struct {
-	account     interface{}
-	transaction interface{}
-}
+
 
 type Output struct {
 	Code  int64
 	Data  interface{}
 	Error string
 }
-type Transactionresponse struct {
-	data []string
-}
+
 
 type Req struct {
 	Merchant_id string`json:"merchant_id"`
@@ -60,10 +55,7 @@ type Data struct {
 	Channel                  string
 }
 
-type Error struct {
-	Code int
-	Msg  string
-}
+
 type Transactionoutput struct {
 	Code int64
 	// Data  interface{}

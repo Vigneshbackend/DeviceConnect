@@ -1,4 +1,4 @@
-module okcBusinessHealth
+module DeviceConnect
 
 go 1.14
 

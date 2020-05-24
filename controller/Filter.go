@@ -10,8 +10,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
-	"okcBusinessHealth/model"
-	"okcBusinessHealth/repo"
+	"DeviceConnect/model"
+	"DeviceConnect/repo"
 
 	"strconv"
 	"time"
@@ -72,7 +72,6 @@ func Timeconversion() {
 	umillisec = unixNano / 1000000
 	start_time = strconv.FormatInt(umillisec, 10)
 
-
 	fmt.Print("-------------------->midnight", midnight_time)
 
 	// end_time = time.ParseD(time.Now().Year(), time.Now().Month(), time.Now().Day(),time.Now().Hour()-time.Now().Hour(), time.Now().Minute()-time.Now().Minute(), time.Now().Second()-time.Now().Second(), 0, time.UTC)
@@ -83,7 +82,7 @@ func Filter(name string) model.QrSummaryData {
 
 	var out model.QrSummaryData
 
-	if name != ""{
+	if name != "" {
 
 		Init()
 		var refer model.Reqbody

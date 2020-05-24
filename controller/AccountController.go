@@ -10,8 +10,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
-	"okcBusinessHealth/model"
-	"okcBusinessHealth/repo"
+	"DeviceConnect/model"
+	"DeviceConnect/repo"
 
 	"github.com/joho/godotenv"
 
@@ -61,7 +61,7 @@ func GetAllAccount(name string) model.SummaryAccount {
 			u, _ := url.ParseRequestURI(apiUrl)
 			urlStr := u.String()
 			req, err := http.NewRequest("POST", urlStr, bytes.NewBuffer(b))
-			if(err!=nil){
+			if err != nil {
 				fmt.Println(err)
 			}
 			req.Header.Add("X-api-key", xapikey)
@@ -95,7 +95,6 @@ func GetAllAccount(name string) model.SummaryAccount {
 				finalizesummary.Requestid = response.Requestid
 				finalizesummary.Status = response.Status
 
-		
 				if response.Status != "in_progress" {
 					finalizesummary.Data = FindRecentlyAccessed(response.Data)
 
@@ -107,7 +106,7 @@ func GetAllAccount(name string) model.SummaryAccount {
 			}
 		}
 	} else {
-		
+
 	}
 	return out
 }

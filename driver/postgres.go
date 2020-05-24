@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"okcBusinessHealth/model"
+	"DeviceConnect/model"
 
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"

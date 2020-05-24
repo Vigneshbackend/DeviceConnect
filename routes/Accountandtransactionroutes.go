@@ -1,10 +1,10 @@
 package routes
 
 import (
+	"DeviceConnect/controller"
+	"DeviceConnect/model"
 	"encoding/json"
 	"net/http"
-	"okcBusinessHealth/controller"
-	"okcBusinessHealth/model"
 
 	"github.com/gorilla/mux"
 
@@ -37,11 +37,9 @@ func HandleAccountRoutes(router *mux.Router) {
 
 	}).Methods("POST")
 
-
 	router.HandleFunc("/GetQRSummary", func(w http.ResponseWriter, r *http.Request) {
 		var out model.QrSummaryOutput
 		var req model.Req
-
 
 		decoder := json.NewDecoder(r.Body)
 		err := decoder.Decode(&req)
@@ -57,25 +55,23 @@ func HandleAccountRoutes(router *mux.Router) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusBadRequest)
 
-
-			}else if(out.Data.Status == "completed"){
+			} else if out.Data.Status == "completed" {
 				out.Code = 200
 				w.WriteHeader(http.StatusOK)
-	
+
 				out.Error = ""
 				w.Header().Set("Content-Type", "application/json")
-			
-			}else if(out.Data.Status == "retry after 10 second"){
+
+			} else if out.Data.Status == "retry after 10 second" {
 				out.Code = 400
 				w.WriteHeader(http.StatusBadRequest)
-	
+
 				out.Error = "retry after 10 second"
 				w.Header().Set("Content-Type", "application/json")
 			}
-			
 
 		} else {
-			
+
 			out.Code = 400
 			w.WriteHeader(http.StatusBadRequest)
 

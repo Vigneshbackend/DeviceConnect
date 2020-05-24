@@ -1,9 +1,9 @@
 package controller
 
 import (
+	"DeviceConnect/model"
 	"fmt"
 	"math"
-	"okcBusinessHealth/model"
 	"sort"
 	"strconv"
 	"strings"
@@ -19,10 +19,7 @@ func FindRecentlyAccessed(array []model.RecentlyAccessed) []model.SummaryAccount
 	var Accounts model.AccountList
 	var test []model.RecentlyAccessed
 
-
 	Accounts.List = array
-
-
 
 	refer := Accounts.List[0].Active_months_list[len(Accounts.List[0].Active_months_list)-1]
 
@@ -37,8 +34,7 @@ func FindRecentlyAccessed(array []model.RecentlyAccessed) []model.SummaryAccount
 
 	var monthcount [12]int
 
-
-	if(len(Accounts.List)>3){
+	if len(Accounts.List) > 3 {
 		for n := 1; n <= 6; n++ {
 
 			for i := 0; i < len(Accounts.List); i++ {
@@ -66,7 +62,6 @@ func FindRecentlyAccessed(array []model.RecentlyAccessed) []model.SummaryAccount
 				referenceyear = referenceyear - 1
 				currentstring[0] = strconv.Itoa(referenceyear)
 
-
 			}
 			split := strings.Split(refer, "-")
 			referencemonth, err := strconv.Atoi(split[1])
@@ -84,7 +79,6 @@ func FindRecentlyAccessed(array []model.RecentlyAccessed) []model.SummaryAccount
 			split[1] = rfm
 
 			yearstring = strings.Join(split, "")
-
 
 		}
 
@@ -110,67 +104,59 @@ func FindRecentlyAccessed(array []model.RecentlyAccessed) []model.SummaryAccount
 
 		reference := 0
 		flag := 0
-		for n := ((len(monthcount)) - 1) ; n >=0 ; n-- {
-			for i := ((len(a))-1); i >= len(a) - 3; i--{
-				
-				if(a[i] == monthcount[n] && flag ==0){
-					
-					test = append(test,Accounts.List[reference] )
+		for n := ((len(monthcount)) - 1); n >= 0; n-- {
+			for i := ((len(a)) - 1); i >= len(a)-3; i-- {
+
+				if a[i] == monthcount[n] && flag == 0 {
+
+					test = append(test, Accounts.List[reference])
 					flag = 1
-						
+
 				}
 
-			
 			}
-			if(len(test)==3){
-					break
-			} 	
-				reference = reference + 1
-				flag = 0
+			if len(test) == 3 {
+				break
 			}
+			reference = reference + 1
+			flag = 0
+		}
 
-		fmt.Println("responseee",monthcount,test[0])
+		fmt.Println("responseee", monthcount, test[0])
 
-
-		
 		var responserefer []model.SummaryAccountData
 
-			fmt.Println("heeeeeeeeelo",test[0].Company,len(test))
+		fmt.Println("heeeeeeeeelo", test[0].Company, len(test))
 
-
-			
-
-
-			var ref model.SummaryAccountData
-			for n := 0; n < len(test); n++ {
+		var ref model.SummaryAccountData
+		for n := 0; n < len(test); n++ {
 
 			ref.Company = test[n].Company
 			ref.Latest_balance = test[n].Latest_balance
 			ref.Latest_balance_date = test[n].Latest_balance_date
 			ref.Number = test[n].Number
 			ref.Type = test[n].Type
-			responserefer = append(responserefer,ref)
+			responserefer = append(responserefer, ref)
 		}
 
 		return responserefer
 
-	}else{
+	} else {
 
 		test = Accounts.List
 		var ref model.SummaryAccountData
 
 		var responserefer []model.SummaryAccountData
-		for n := 0; n<len(test); n++ {
+		for n := 0; n < len(test); n++ {
 
 			ref.Company = test[n].Company
 			ref.Latest_balance = test[n].Latest_balance
 			ref.Latest_balance_date = test[n].Latest_balance_date
 			ref.Number = test[n].Number
 			ref.Type = test[n].Type
-			responserefer = append(responserefer,ref)
-		
-		
+			responserefer = append(responserefer, ref)
+
 		}
-			return responserefer
+		return responserefer
 	}
 }
