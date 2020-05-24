@@ -131,7 +131,14 @@ func FindRecentlyAccessed(array []model.RecentlyAccessed) []model.SummaryAccount
 		var ref model.SummaryAccountData
 		for n := 0; n < len(test); n++ {
 
-			ref.Company = test[n].Company
+			if(test[n].Number!=""){
+				ref.Company = test[n].Company + "-"+test[n].Number
+
+			}else{
+				ref.Company = test[n].Company 
+
+			}
+
 			ref.Latest_balance = test[n].Latest_balance
 			ref.Latest_balance_date = test[n].Latest_balance_date
 			ref.Number = test[n].Number
@@ -148,8 +155,13 @@ func FindRecentlyAccessed(array []model.RecentlyAccessed) []model.SummaryAccount
 
 		var responserefer []model.SummaryAccountData
 		for n := 0; n < len(test); n++ {
+			if(test[n].Number!=""){
+				ref.Company = test[n].Company + "-"+test[n].Number
 
-			ref.Company = test[n].Company
+			}else{
+				ref.Company = test[n].Company 
+
+			}
 			ref.Latest_balance = test[n].Latest_balance
 			ref.Latest_balance_date = test[n].Latest_balance_date
 			ref.Number = test[n].Number

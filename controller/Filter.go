@@ -72,7 +72,7 @@ func Timeconversion() {
 	umillisec = unixNano / 1000000
 	start_time = strconv.FormatInt(umillisec, 10)
 
-	fmt.Print("-------------------->midnight", midnight_time)
+	// fmt.Print("-------------------->midnight", midnight_time)
 
 	// end_time = time.ParseD(time.Now().Year(), time.Now().Month(), time.Now().Day(),time.Now().Hour()-time.Now().Hour(), time.Now().Minute()-time.Now().Minute(), time.Now().Second()-time.Now().Second(), 0, time.UTC)
 
@@ -121,34 +121,36 @@ func Filter(name string) model.QrSummaryData {
 			if err != nil {
 				fmt.Print("___________________>", err)
 			}
+					 if( transaction.Status == "complete") {
 
-			if transaction.Status != "in_progress" {
+						var test []model.Data
+						for _, b := range transaction.Data {
+							fmt.Println("------------------------------>tr", b)
+							if b.Type == "debit" && b.Channel == "upi" {
+								Transactionamount = Transactionamount + b.Amount
+								test = append(test, b)
+							}
 
-				var test []model.Data
-				for _, b := range transaction.Data {
-					fmt.Println("------------------------------>tr", b)
-					if b.Type == "debit" && b.Channel == "upi" {
-						Transactionamount = Transactionamount + b.Amount
-						test = append(test, b)
+						}
+
+						out.TotalTransaction = len(test)
+						out.TransactionAmount = Transactionamount
+						if err != nil {
+							print(err)
+							out.Status = "fetch failed"
+						} else {
+							out.Status = "completed"
+						}
+					} else if(transaction.Status=="in_progress"){
+						out.Status = "retry after 10 second"
+					}else if(transaction.Status=="no_data"){
+						out.Status = "no_data"
+						
 					}
-
-				}
-
-				out.TotalTransaction = len(test)
-				out.TransactionAmount = Transactionamount
-				if err != nil {
-					print(err)
-					out.Status = "fetch failed"
-				} else {
-					out.Status = "completed"
-				}
-			} else {
-				out.Status = "retry after 10 second"
-			}
 		}
 
 	} else {
-		out.Status = "in_progress"
+		out.Status = "check parameter"
 
 	}
 	return out

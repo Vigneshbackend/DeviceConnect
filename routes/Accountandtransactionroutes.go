@@ -22,6 +22,7 @@ func HandleAccountRoutes(router *mux.Router) {
 
 		if err == nil {
 			out.Data = controller.GetAllAccount(req.Merchant_id)
+			fmt.Println("checking",out.Data.Status)
 			if out.Data.Status == "in_progress" {
 				out.Code = 500
 				out.Error = "please try again in 10 Seconds"
@@ -31,9 +32,24 @@ func HandleAccountRoutes(router *mux.Router) {
 			} else if out.Data.Status == "complete" {
 				out.Code = 200
 
+			}	else if out.Data.Status == "no_data" {
+				out.Error = "No data found"
+				out.Code = 200
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+
 			}
-			json.NewEncoder(w).Encode(out)
+			
+		}else {
+
+			out.Code = 400
+			w.WriteHeader(http.StatusBadRequest)
+
+			out.Error = "checkParameter"
+			w.Header().Set("Content-Type", "application/json")
+
 		}
+		json.NewEncoder(w).Encode(out)
 
 	}).Methods("POST")
 
@@ -49,11 +65,14 @@ func HandleAccountRoutes(router *mux.Router) {
 		if err == nil {
 
 			out.Data = controller.Filter(req.Merchant_id)
-			if out.Data.Status != "completed" {
-				out.Error = out.Data.Status
-				out.Code = 400
+			
+			
+			
+			if out.Data.Status == "no_data" {
+				out.Error = "No data found"
+				out.Code = 200
 				w.Header().Set("Content-Type", "application/json")
-				w.WriteHeader(http.StatusBadRequest)
+				w.WriteHeader(http.StatusOK)
 
 			} else if out.Data.Status == "completed" {
 				out.Code = 200
@@ -68,6 +87,12 @@ func HandleAccountRoutes(router *mux.Router) {
 
 				out.Error = "retry after 10 second"
 				w.Header().Set("Content-Type", "application/json")
+			}else if out.Data.Status != "completed" {
+				out.Error = out.Data.Status
+				out.Code = 400
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusBadRequest)
+
 			}
 
 		} else {

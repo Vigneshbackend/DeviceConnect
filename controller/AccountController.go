@@ -75,7 +75,7 @@ func GetAllAccount(name string) model.SummaryAccount {
 			defer resp.Body.Close()
 			var response model.AccountOutput
 			body, err := ioutil.ReadAll(resp.Body)
-			fmt.Println()
+			fmt.Println("bodyy",body)
 			// err = json.Unmarshal([]byte(body), &out.Data)
 
 			if err != nil {
@@ -83,26 +83,38 @@ func GetAllAccount(name string) model.SummaryAccount {
 				// out.Error = "failed"
 				// out.Code = 500
 			} else {
-				err = json.Unmarshal([]byte(body), &response)
+				var check model.NoData
+				err = json.Unmarshal([]byte(body), &check)
 				if err != nil {
 					fmt.Println(err)
 				}
-				var finalizesummary model.SummaryAccount
-				finalizesummary.Customerid = response.Customerid
-				finalizesummary.Date_processed = response.Date_processed
-				finalizesummary.Date_requested = response.Date_requested
-				finalizesummary.Message = response.Message
-				finalizesummary.Requestid = response.Requestid
-				finalizesummary.Status = response.Status
 
-				if response.Status != "in_progress" {
-					finalizesummary.Data = FindRecentlyAccessed(response.Data)
+				fmt.Println("responseee",check)
+				fmt.Println("verify",check.Status)
+				
 
-				}
-				out = finalizesummary
-				if err != nil {
-					fmt.Println(err)
-				}
+					err = json.Unmarshal([]byte(body), &response)
+					fmt.Println("responseee",response)
+					if err != nil {
+						fmt.Println(err)
+					}
+					var finalizesummary model.SummaryAccount
+					finalizesummary.Customerid = response.Customerid
+					finalizesummary.Date_processed = response.Date_processed
+					finalizesummary.Date_requested = response.Date_requested
+					finalizesummary.Message = response.Message
+					finalizesummary.Requestid = response.Requestid
+					finalizesummary.Status = response.Status
+
+					if response.Status != "in_progress" && response.Status!="no_data" {
+						finalizesummary.Data = FindRecentlyAccessed(response.Data)
+
+					}
+					out = finalizesummary
+					if err != nil {
+						fmt.Println(err)
+					}
+					
 			}
 		}
 	} else {

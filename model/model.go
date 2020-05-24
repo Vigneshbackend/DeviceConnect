@@ -186,3 +186,14 @@ type QrSummaryData struct{
     TransactionAmount float64
 }
 
+
+
+type NoData struct{
+Customer_id string 
+Request_id string 
+Date_requested string
+Date_processed string
+Status string 
+Message string 
+Data interface{}
+}
