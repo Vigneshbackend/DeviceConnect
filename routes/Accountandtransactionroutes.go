@@ -18,6 +18,7 @@ func HandleAccountRoutes(router *mux.Router) {
 		var req model.Req
 		decoder := json.NewDecoder(r.Body)
 		err := decoder.Decode(&req)
+		fmt.Println("errr",err)
 		w.Header().Set("Content-Type", "application/json")
 
 		if err == nil {
@@ -38,9 +39,15 @@ func HandleAccountRoutes(router *mux.Router) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
 
+			}   else if out.Data.Status != "completed" {
+				out.Error = out.Data.Status
+				out.Code = 400
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusBadRequest)
+
 			}
 			
-		}else {
+		} else {
 
 			out.Code = 400
 			w.WriteHeader(http.StatusBadRequest)
@@ -63,6 +70,7 @@ func HandleAccountRoutes(router *mux.Router) {
 		w.Header().Set("Content-Type", "application/json")
 
 		if err == nil {
+			fmt.Println("calledd")
 
 			out.Data = controller.Filter(req.Merchant_id)
 			

@@ -61,18 +61,28 @@ func Timeconversion() {
 	// }
 
 	now := time.Now()
+	now = now.Add(-30*time.Minute)
+	fmt.Println("now",now)
 	unixNano := now.UnixNano()
 	umillisec := unixNano / 1000000
 	end_time = strconv.FormatInt(umillisec, 10)
 
 	now_string := now.Format("2006-02-01")
 	midnight_time, _ := time.Parse("2006-02-01", now_string)
-
-	unixNano = midnight_time.UnixNano()
+	// midnight_time = midnight_time.Add(-30*time.Minute)
+	// midnight_time = midnight_time.Add(-5*time.Hour)
+	duration, _ := time.ParseDuration("-5.5h")
+	new_time :=  midnight_time.Add(duration)
+	new1:=new_time.AddDate(0, 0, 1)
+	fmt.Println("neew",new1)
+	unixNano = new_time.UnixNano()
+	fmt.Println("unixnano",unixNano)
 	umillisec = unixNano / 1000000
 	start_time = strconv.FormatInt(umillisec, 10)
 
-	// fmt.Print("-------------------->midnight", midnight_time)
+
+	
+
 
 	// end_time = time.ParseD(time.Now().Year(), time.Now().Month(), time.Now().Day(),time.Now().Hour()-time.Now().Hour(), time.Now().Minute()-time.Now().Minute(), time.Now().Second()-time.Now().Second(), 0, time.UTC)
 
@@ -93,14 +103,14 @@ func Filter(name string) model.QrSummaryData {
 		refer.Version = version
 		refer.Salt = repo.GetSaltForCustomer(name)
 		refer.Num_records = ""
-		refer.Start_time = end_time
-		refer.End_time = start_time
+		refer.Start_time = start_time
+		refer.End_time = end_time
 
 		b, err := json.Marshal(refer)
 		if err == nil {
 			client := &http.Client{}
 
-			apiURL := "https://insights.finbox.in/staging/transactions?num_records=1000&start_time=" + refer.Start_time + "&end_time=" + refer.End_time
+			apiURL := "https://insights.finbox.in/staging/transactions?num_records=1000&start_time=" + start_time + "&end_time=" + refer.End_time
 			u, _ := url.ParseRequestURI(apiURL)
 			urlStr := u.String()
 			req, err := http.NewRequest("POST", urlStr, bytes.NewBuffer(b))
@@ -118,6 +128,8 @@ func Filter(name string) model.QrSummaryData {
 			// err = json.Unmarshal([]byte(body), &out.Data)
 
 			err = json.Unmarshal([]byte(body), &transaction)
+			fmt.Println("err",err)
+			fmt.Println("reference",transaction)
 			if err != nil {
 				fmt.Print("___________________>", err)
 			}
@@ -125,8 +137,7 @@ func Filter(name string) model.QrSummaryData {
 
 						var test []model.Data
 						for _, b := range transaction.Data {
-							fmt.Println("------------------------------>tr", b)
-							if b.Type == "debit" && b.Channel == "upi" {
+							if b.Type == "credit" && b.Channel == "upi" {
 								Transactionamount = Transactionamount + b.Amount
 								test = append(test, b)
 							}

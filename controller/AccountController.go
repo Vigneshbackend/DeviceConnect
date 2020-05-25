@@ -75,7 +75,7 @@ func GetAllAccount(name string) model.SummaryAccount {
 			defer resp.Body.Close()
 			var response model.AccountOutput
 			body, err := ioutil.ReadAll(resp.Body)
-			fmt.Println("bodyy",body)
+			// fmt.Println("bodyy",body)
 			// err = json.Unmarshal([]byte(body), &out.Data)
 
 			if err != nil {
@@ -118,6 +118,7 @@ func GetAllAccount(name string) model.SummaryAccount {
 			}
 		}
 	} else {
+   out.Status = "checkparameter"
 
 	}
 	return out
